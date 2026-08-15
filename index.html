@@ -3,12 +3,12 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mercadillo del Tercio</title><link rel="stylesheet" href="styles.css"></head>
 <body>
 <header class="hero">
-<nav class="nav"><a class="logo" href="#">Mercadillo<span>delTercio</span></a><button class="cart-btn" id="openCart">🛒 Carrito <b id="cartCount">0</b></button></nav>
+<nav class="nav"><a class="logo" href="#">Mercadillo<span>delTercio</span></a><div class="nav-actions"><button class="fav-btn" id="favoritesBtn">❤️ Favoritos <b id="favoritesCount">0</b></button><button class="cart-btn" id="openCart">🛒 Carrito <b id="cartCount">0</b></button></div></nav>
 <div class="hero-content"><p class="eyebrow">Hecho entre amigos · Entrega a domicilio</p><h1>Pequeñas cosas,<br><span>grandes detalles.</span></h1><p>Descubre nuestras pulseras, llaveros, hamabeads y mucho más.</p><a href="#productos" class="primary">Ver productos</a></div>
 </header>
 <main><section class="section" id="productos">
 <div class="section-title"><div><p class="eyebrow">Catálogo</p><h2>Nuestros productos</h2></div>
-<div class="toolbar"><input id="search" class="search" placeholder="🔎 Buscar productos"><select id="categoryFilter"><option value="">Todas las categorías</option></select><select id="sort"><option value="featured">Destacados</option><option value="priceAsc">Precio: menor</option><option value="priceDesc">Precio: mayor</option><option value="name">Nombre</option></select></div></div>
+<div class="toolbar"><input id="search" class="search" placeholder="🔎 Buscar productos"><select id="categoryFilter"><option value="">Todas las categorías</option></select><button class="fav-filter" id="showFavorites">❤️ Ver favoritos</button><select id="sort"><option value="featured">Destacados</option><option value="priceAsc">Precio: menor</option><option value="priceDesc">Precio: mayor</option><option value="name">Nombre</option></select></div></div>
 <div id="featuredWrap" class="featured-wrap"></div><div id="productGrid" class="grid"></div>
 </section>
 <section class="info"><div><span>🚚</span><strong>Entrega a domicilio</strong><p>Coordinamos contigo los detalles del pedido.</p></div><div><span>💬</span><strong>Pedido fácil</strong><p>Elige tus productos y recibe confirmación.</p></div><div><span>✨</span><strong>Hecho por nosotros</strong><p>Un pequeño proyecto hecho entre amigos.</p></div></section></main>

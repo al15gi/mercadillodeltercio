@@ -6,13 +6,13 @@
 <section id="login" class="card"><h1>Panel de administrador</h1><p>Introduce la contraseña.</p><input id="pass" type="password" placeholder="Contraseña"><br><button class="btn primary" id="go">Entrar</button><div id="loginMsg" class="msg"></div></section>
 <section id="panel" class="hidden"><div id="msg" class="msg"></div>
 <div class="card"><h2>Resumen</h2><div class="stats"><div class="stat">Ventas<b id="sales">0 €</b></div><div class="stat">Pedidos<b id="oc">0</b></div><div class="stat">Productos<b id="pc">0</b></div><div class="stat">Poco stock<b id="ls">0</b></div></div></div>
-<div class="tabs"><button class="tab active" data-tab="p">🛍️ Productos</button><button class="tab" data-tab="o">📦 Pedidos</button></div>
+<div class="tabs"><button class="tab active" data-tab="p">🛍️ Productos</button><button class="tab" data-tab="o">📦 Historial de pedidos</button></div>
 <section id="pTab">
 <div class="card"><h2>Añadir producto</h2><form id="add">
 <div class="grid"><label>Nombre<input required id="n"></label><label>Precio<input required id="pr" type="number" min="0" step=".01"></label><label>Categoría<input id="cat" placeholder="Pulseras"></label><label>Stock<input required id="stock" type="number" min="0"></label><label>Emoji<input id="emoji" placeholder="📿"></label><label>Foto URL<input id="img" placeholder="https://..."></label></div><label>Descripción<textarea id="desc" rows="2"></textarea><label><input id="feat" type="checkbox" style="width:auto;display:inline"> Destacado</label><br><button class="btn primary">Añadir producto</button></form></div>
 <div class="card"><div class="top"><h2>Productos</h2><button class="btn ghost" id="refreshP">Actualizar</button></div><div id="products" class="table">Cargando…</div></div>
 </section>
-<section id="oTab" class="hidden"><div class="card"><div class="top"><h2>Pedidos</h2><button class="btn ghost" id="refreshO">Actualizar</button></div><div id="orders" class="table">Cargando…</div></div></section>
+<section id="oTab" class="hidden"><div class="card"><div class="top"><h2>Historial de pedidos y estados</h2><button class="btn ghost" id="refreshO">Actualizar</button></div><div id="orders" class="table">Cargando…</div></div></section>
 </section></div>
 <script>
 const API="https://script.google.com/macros/s/AKfycbxXR3guyd9YLeo1UPDFA3syw6b1BJJ5-S1z3oITFcbf0hVLE_Gau5ZacugayS6QREeXeA/exec";let pw=sessionStorage.getItem("mdt-admin-password")||"";
