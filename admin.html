@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Mercadillo del Tercio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f5f2;color:#171717}
+.wrap{max-width:980px;margin:auto;padding:24px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+.logo{font-size:22px;font-weight:900}.logo span{font-weight:500}
+.card{background:#fff;border:1px solid #e4e4df;border-radius:20px;padding:22px;box-shadow:0 8px 30px #00000008;margin-bottom:18px}
+h1,h2{margin:0 0 8px}p{color:#777}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+label{font-size:13px;font-weight:750}input,textarea{display:block;width:100%;margin-top:6px;padding:11px;border:1px solid #d8d8d2;border-radius:10px;font:inherit}
+.btn{border:0;border-radius:11px;padding:11px 15px;cursor:pointer;font-weight:800}.primary{background:#171717;color:#fff}.danger{background:#ffe3e3;color:#9a1b1b}.ghost{background:#efefeb}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.hidden{display:none!important}
+table{width:100%;border-collapse:collapse}th,td{padding:11px 8px;border-bottom:1px solid #eee;text-align:left;font-size:14px}th{font-size:12px;text-transform:uppercase;color:#777}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.msg{padding:10px 12px;border-radius:10px;background:#f0f7dc;display:none;margin-bottom:15px}.msg.show{display:block}
+@media(max-width:700px){.grid{grid-template-columns:1fr}table{display:block;overflow:auto;white-space:nowrap}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">Mercadillo<span>delTercio</span> · Admin</div>
+  <button class="btn ghost" id="logout">Cerrar sesión</button>
+</header>
+
+<section id="loginCard" class="card">
+  <h1>Panel de administrador</h1>
+  <p>Introduce la contraseña de administrador.</p>
+  <label>Contraseña<input id="password" type="password" autocomplete="current-password"></label>
+  <br>
+  <button class="btn primary" id="loginBtn">Entrar</button>
+  <div id="loginMsg" class="msg"></div>
+</section>
+
+<section id="admin" class="hidden">
+  <div id="msg" class="msg"></div>
+
+  <div class="card">
+    <div class="top"><div><h2>Añadir producto</h2><p>Crea un producto nuevo para la tienda.</p></div></div>
+    <form id="addForm">
+      <div class="grid">
+        <label>Nombre<input required id="newName" placeholder="Pulsera roja"></label>
+        <label>Precio (€)<input required id="newPrice" type="number" min="0" step="0.01" placeholder="3"></label>
+        <label>Emoji<input id="newEmoji" maxlength="4" placeholder="📿"></label>
+        <label>Foto (opcional)<input id="newImage" placeholder="https://..."></label>
+      </div>
+      <label>Descripción<textarea id="newDesc" rows="2" placeholder="Descripción corta"></textarea></label>
+      <br>
+      <button class="btn primary" type="submit">+ Añadir producto</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="top">
+      <div><h2>Productos</h2><p>Edita precios y elimina artículos sin tocar código.</p></div>
+      <button class="btn ghost" id="refresh">Actualizar</button>
+    </div>
+    <div id="productsTable">Cargando…</div>
+  </div>
+</section>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwJmvBHqixA1fkUvnNBQ8rXnM7CRcYJ802AEFhWXggvoaXebTP5Omq7TfZXn13n59EY/exec";
+let password = sessionStorage.getItem("mdt-admin-password") || "";
+
+function showMsg(text, el="msg"){
+  const box=document.getElementById(el);
+  box.textContent=text;
+  box.classList.add("show");
+  setTimeout(()=>box.classList.remove("show"),3500);
+}
+
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb="mdt_cb_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+    const script=document.createElement("script");
+    window[cb]=data=>{delete window[cb];script.remove();resolve(data)};
+    script.onerror=()=>{delete window[cb];script.remove();reject(new Error("No se pudo conectar"))};
+    script.src=url+(url.includes("?")?"&":"?")+"callback="+cb;
+    document.body.appendChild(script);
+  });
+}
+
+async function loadProducts(){
+  const box=document.getElementById("productsTable");
+  box.textContent="Cargando…";
+  try{
+    const data=await jsonp(API_URL+"?action=list");
+    if(!data.ok) throw new Error(data.error||"Error");
+    if(!data.products.length){box.innerHTML="<p>No hay productos todavía.</p>";return}
+    box.innerHTML=`<table><thead><tr><th>Producto</th><th>Precio</th><th>Foto</th><th>Acciones</th></tr></thead><tbody>${
+      data.products.map(p=>`<tr>
+        <td><b>${escapeHtml(p.name)}</b><br><small>${escapeHtml(p.desc||"")}</small></td>
+        <td><input data-price="${p.id}" type="number" step="0.01" min="0" value="${Number(p.price).toFixed(2)}"></td>
+        <td>${p.image?`<img src="${escapeAttr(p.image)}" style="width:50px;height:50px;object-fit:cover;border-radius:8px">`:(p.emoji||"—")}</td>
+        <td><div class="actions">
+          <button class="btn primary" onclick="editProduct(${p.id})">Guardar</button>
+          <button class="btn danger" onclick="deleteProduct(${p.id})">Eliminar</button>
+        </div></td>
+      </tr>`).join("")
+    }</tbody></table>`;
+  }catch(e){box.textContent="No se pudo cargar. Comprueba que la implementación esté publicada como aplicación web.";console.error(e)}
+}
+
+function postForm(fields){
+  return new Promise(resolve=>{
+    const iframe=document.createElement("iframe");
+    iframe.name="mdt_hidden_"+Date.now();iframe.style.display="none";document.body.appendChild(iframe);
+    const form=document.createElement("form");
+    form.method="POST";form.action=API_URL;form.target=iframe.name;form.style.display="none";
+    Object.entries(fields).forEach(([k,v])=>{const i=document.createElement("input");i.name=k;i.value=v;form.appendChild(i)});
+    document.body.appendChild(form);form.submit();
+    setTimeout(()=>{form.remove();iframe.remove();resolve()},1000);
+  });
+}
+
+async function editProduct(id){
+  const price=document.querySelector(`[data-price="${id}"]`).value;
+  await postForm({action:"edit",password,id,price});
+  showMsg("Precio guardado ✅");
+  setTimeout(loadProducts,800);
+}
+
+async function deleteProduct(id){
+  if(!confirm("¿Eliminar este producto?")) return;
+  await postForm({action:"delete",password,id});
+  showMsg("Producto eliminado ✅");
+  setTimeout(loadProducts,800);
+}
+
+document.getElementById("loginBtn").onclick=async()=>{
+  password=document.getElementById("password").value;
+  try{
+    const data=await jsonp(API_URL+"?action=auth&password="+encodeURIComponent(password));
+    if(!data.ok){showMsg("Contraseña incorrecta.","loginMsg");return}
+    sessionStorage.setItem("mdt-admin-password",password);
+    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("admin").classList.remove("hidden");
+    loadProducts();
+  }catch(e){showMsg("No se pudo conectar con el panel.","loginMsg")}
+};
+
+document.getElementById("logout").onclick=()=>{
+  sessionStorage.removeItem("mdt-admin-password"); location.reload();
+};
+document.getElementById("refresh").onclick=loadProducts;
+
+document.getElementById("addForm").onsubmit=async e=>{
+  e.preventDefault();
+  await postForm({
+    action:"add",password,
+    name:document.getElementById("newName").value,
+    price:document.getElementById("newPrice").value,
+    emoji:document.getElementById("newEmoji").value,
+    image:document.getElementById("newImage").value,
+    desc:document.getElementById("newDesc").value
+  });
+  e.target.reset();
+  showMsg("Producto añadido ✅");
+  setTimeout(loadProducts,800);
+};
+
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function escapeAttr(s){return escapeHtml(s)}
+
+if(password){
+  document.getElementById("loginCard").classList.add("hidden");
+  document.getElementById("admin").classList.remove("hidden");
+  loadProducts();
+}
+</script>
+</body>
+</html>
