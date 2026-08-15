@@ -4,7 +4,7 @@ const products = [
   {id:3,name:"Hamabeads",price:0,emoji:"🧩",desc:"Figuras y diseños hechos con hamabeads."},
   {id:4,name:"Más cosas",price:0,emoji:"✨",desc:"Estamos preparando nuevos productos."}
 ];
-
+const TELEGRAM_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyLdrFExLgQ6JCQxlV2Pwch736Uo7c7xIW_SV159Sm7W8LQTWy30GMEhU-UhyaHsEdb/exec";
 let cart = JSON.parse(localStorage.getItem("mdt-cart") || "[]");
 
 const grid = document.getElementById("productGrid");
@@ -57,24 +57,52 @@ document.getElementById("checkoutBtn").onclick=()=>{
   dialog.showModal();
 };
 
-document.getElementById("checkoutForm").addEventListener("submit",e=>{
+document.getElementById("checkoutForm").addEventListener("submit", async e=>{
   e.preventDefault();
-  const name=document.getElementById("name").value.trim();
-  const phone=document.getElementById("phone").value.trim();
-  const address=document.getElementById("address").value.trim();
-  const notes=document.getElementById("notes").value.trim();
-  const lines=cart.map(i=>{const p=products.find(x=>x.id===i.id);return `• ${i.qty} × ${p.name} — ${money(p.price*i.qty)}`}).join("\n");
-  const total=money(cart.reduce((s,i)=>s+products.find(p=>p.id===i.id).price*i.qty,0));
-  const message=`🛍️ NUEVO PEDIDO — Mercadillo del Tercio\n\n👤 ${name}\n📞 ${phone}\n📍 ${address}\n\n${lines}\n\n💶 Total: ${total}${notes?`\n\n📝 Notas: ${notes}`:""}\n\n⚠️ Pedido preparado desde la web.`;
 
-  // Sustituye este usuario por vuestro usuario de Telegram (sin @).
-  const TELEGRAM_USERNAME = "PON_AQUI_VUESTRO_USUARIO";
-  if(TELEGRAM_USERNAME==="PON_AQUI_VUESTRO_USUARIO"){
-    alert("La web está lista. Para enviar pedidos por Telegram, hay que configurar vuestro usuario/bot de Telegram en app.js.");
-    return;
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const notes = document.getElementById("notes").value.trim();
+
+  const lines = cart.map(i=>{
+    const p = products.find(x=>x.id===i.id);
+    return `• ${i.qty} × ${p.name} — ${money(p.price*i.qty)}`;
+  }).join("\n");
+
+  const total = money(
+    cart.reduce((s,i)=>s + products.find(p=>p.id===i.id).price*i.qty, 0)
+  );
+
+  const pedido = {
+    name: name,
+    phone: phone,
+    address: address,
+    items: lines,
+    total: total,
+    notes: notes
+  };
+
+  try {
+    await fetch(TELEGRAM_WEBAPP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(pedido)
+    });
+
+    cart = [];
+    save();
+    dialog.close();
+    closeCart();
+
+    alert("¡Pedido enviado! 🎉\n\nOs llegará por Telegram.");
+  } catch(error) {
+    alert("No se ha podido enviar el pedido. Inténtalo de nuevo.");
   }
-  window.open(`https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`,"_blank");
 });
-
+  
 renderProducts();
 renderCart();
