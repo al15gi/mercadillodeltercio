@@ -1,17 +1,84 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mercadillo del Tercio</title><link rel="stylesheet" href="styles.css"></head><body>
-<header class="hero"><nav class="nav"><a class="logo" href="#">Mercadillo<span>delTercio</span></a>
-<div><button id="favOpen" class="pill">❤️ <b id="favCount">0</b></button><button id="cartOpen" class="pill">🛒 <b id="cartCount">0</b></button></div></nav>
-<div class="heroText"><p class="eyebrow">Hecho entre amigos · Entrega a domicilio</p><h1>Pequeñas cosas,<br><span>grandes detalles.</span></h1><p>Productos, favoritos, ofertas y Club del Tercio.</p><a class="primary" href="#productos">Ver productos</a> <button class="secondary" id="clubOpen">⭐ Mi Club</button></div></header>
-<main><section class="section" id="productos"><div class="title"><div><p class="eyebrow">Catálogo</p><h2>Nuestros productos</h2></div>
-<div class="toolbar"><input id="search" placeholder="🔎 Buscar"><select id="cat"><option value="">Todas las categorías</option></select><select id="sort"><option value="featured">Destacados</option><option value="bestsellers">Más vendidos</option><option value="newest">Novedades</option><option value="priceAsc">Precio menor</option><option value="priceDesc">Precio mayor</option></select><button id="onlyFav" class="tool">❤️ Favoritos</button></div></div>
-<div id="grid" class="grid"></div></section>
-<section class="section club"><h2>⭐ Club del Tercio</h2><p>1 € gastado = 1 punto. Cada 100 puntos desbloquean un premio.</p><button class="primary" id="clubOpen2">Ver mis puntos</button></section></main>
-<div id="overlay" class="overlay"></div>
-<aside id="favPanel" class="side"><div class="sideHead"><h2>❤️ Favoritos</h2><button id="favClose">✕</button></div><div id="favList" class="sideBody"></div></aside>
-<aside id="cartPanel" class="side"><div class="sideHead"><h2>🛒 Carrito</h2><button id="cartClose">✕</button></div><div id="cartList" class="sideBody"></div><div class="cartBottom"><div class="coupon"><input id="coupon" placeholder="Cupón"><button id="couponBtn" class="tool">Aplicar</button></div><p id="couponMsg" class="small"></p><div class="total"><span>Total</span><b id="total">0,00 €</b></div><button id="checkout" class="primary full">Hacer pedido</button></div></aside>
-<dialog id="orderDialog"><form id="orderForm" method="dialog"><button class="x">✕</button><p class="eyebrow">Pedido</p><h2>Datos de entrega</h2><label>Nombre<input required id="name"></label><label>Teléfono<input required id="phone"></label><label>Dirección<textarea required id="address"></textarea></label><label>Notas<textarea id="notes"></textarea></label><button class="primary full">Confirmar pedido</button></form></dialog>
-<dialog id="clubDialog"><form id="clubForm" method="dialog"><button class="x">✕</button><p class="eyebrow">Club del Tercio</p><h2>⭐ Tus puntos</h2><label>Teléfono<input required id="clubPhone"></label><button class="primary full">Consultar</button><div id="clubResult" class="result"></div></form></dialog>
-<dialog id="reviewDialog"><form id="reviewForm" method="dialog"><button class="x">✕</button><p class="eyebrow">Valorar producto</p><input type="hidden" id="reviewProduct"><label>Nombre<input id="reviewName"></label><label>Estrellas<select id="reviewRating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label><label>Comentario<textarea id="reviewText"></textarea></label><button class="primary full">Enviar valoración</button></form></dialog>
-<footer><div class="logo">Mercadillo<span>delTercio</span></div><p>© 2026 · Proyecto entre amigos</p></footer><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mercadillo del Tercio: pulseras, llaveros, hamabeads y más.">
+  <title>Mercadillo del Tercio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav">
+      <div class="logo">Mercadillo<span>delTercio</span></div>
+      <div class="nav-actions"><button class="cart-btn" id="favoritesBtn">❤️ Favoritos <b id="favoritesCount">0</b></button><button class="cart-btn" id="openCart">🛒 Carrito <b id="cartCount">0</b></button></div>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Hecho con ganas · Entrega a domicilio</p>
+      <h1>Pequeñas cosas,<br><span>grandes detalles.</span></h1>
+      <p>Descubre nuestras pulseras, llaveros, hamabeads y mucho más.</p>
+      <a href="#productos" class="primary">Ver productos</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="productos">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Catálogo</p>
+          <h2>Nuestros productos</h2>
+        </div>
+        <div class="toolbar-extra">
+          <input id="searchProducts" class="search-products" placeholder="🔎 Buscar">
+          <button id="showFavorites" class="extra-btn">❤️ Favoritos</button>
+        </div>
+      </div>
+      <div class="grid" id="productGrid"></div>
+    </section>
+
+    <section class="info">
+      <div><span>🚚</span><strong>Entrega a domicilio</strong><p>Coordinamos contigo los detalles del pedido.</p></div>
+      <div><span>💬</span><strong>Pedido fácil</strong><p>Elige tus productos y envíanos el pedido.</p></div>
+      <div><span>✨</span><strong>Hecho por nosotros</strong><p>Un pequeño proyecto hecho entre amigos.</p></div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart" id="cart">
+    <div class="cart-head">
+      <h2>Tu pedido</h2>
+      <button id="closeCart" class="icon-btn">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-bottom">
+      <div class="total"><span>Total</span><strong id="cartTotal">0,00 €</strong></div>
+      <button class="primary full" id="checkoutBtn">Hacer pedido</button>
+      <p class="small">Al pulsar, se abrirá Telegram con el pedido preparado para enviarlo.</p>
+    </div>
+  </aside>
+
+  <aside class="cart" id="favoritesPanel">
+  <div class="cart-head"><h2>❤️ Favoritos</h2><button id="closeFavorites" class="icon-btn">✕</button></div>
+  <div id="favoriteItems" class="cart-items"></div>
+</aside>
+<dialog id="checkoutDialog">
+    <form method="dialog" id="checkoutForm">
+      <button class="dialog-close" value="cancel">✕</button>
+      <p class="eyebrow">Último paso</p>
+      <h2>Datos de entrega</h2>
+      <label>Nombre<input required id="name" placeholder="Tu nombre"></label>
+      <label>Teléfono<input required id="phone" type="tel" placeholder="600 000 000"></label>
+      <label>Dirección de entrega<textarea required id="address" rows="3" placeholder="Calle, número, piso..."></textarea></label>
+      <label>Notas (opcional)<textarea id="notes" rows="2" placeholder="Color, tamaño, indicaciones..."></textarea></label>
+      <button class="primary full" value="submit">Preparar pedido en Telegram</button>
+    </form>
+  </dialog>
+
+  <footer>
+    <div class="logo">Mercadillo<span>delTercio</span></div>
+    <p>© 2026 · Proyecto entre amigos</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
