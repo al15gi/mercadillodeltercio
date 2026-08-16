@@ -1,84 +1,107 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Mercadillo del Tercio: pulseras, llaveros, hamabeads y más.">
-  <title>Mercadillo del Tercio</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Mercadillo del Tercio">
+<title>Mercadillo del Tercio</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <nav class="nav">
-      <div class="logo">Mercadillo<span>delTercio</span></div>
-      <div class="nav-actions"><button class="cart-btn" id="favoritesBtn">❤️ Favoritos <b id="favoritesCount">0</b></button><button class="cart-btn" id="openCart">🛒 Carrito <b id="cartCount">0</b></button></div>
-    </nav>
-    <div class="hero-content">
-      <p class="eyebrow">Hecho con ganas · Entrega a domicilio</p>
-      <h1>Pequeñas cosas,<br><span>grandes detalles.</span></h1>
-      <p>Descubre nuestras pulseras, llaveros, hamabeads y mucho más.</p>
-      <a href="#productos" class="primary">Ver productos</a>
-    </div>
-  </header>
+<header class="hero">
+<nav class="nav">
+<a class="logo" href="#">Mercadillo<span>delTercio</span></a>
+<div class="nav-actions">
+<button id="favoritesBtn" class="cart-btn">❤️ Favoritos <b id="favoritesCount">0</b></button>
+<button id="openCart" class="cart-btn">🛒 Carrito <b id="cartCount">0</b></button>
+</div>
+</nav>
+<div class="hero-content">
+<p class="eyebrow">Hecho entre amigos · Entrega a domicilio</p>
+<h1>Pequeñas cosas,<br><span>grandes detalles.</span></h1>
+<p>Descubre nuestras pulseras, llaveros, hamabeads y mucho más.</p>
+<div class="hero-actions"><a href="#productos" class="primary">Ver productos</a><button class="secondary" id="clubBtn">⭐ Mi Club</button></div>
+</div>
+</header>
 
-  <main>
-    <section class="section" id="productos">
-      <div class="section-title">
-        <div>
-          <p class="eyebrow">Catálogo</p>
-          <h2>Nuestros productos</h2>
-        </div>
-        <div class="toolbar-extra">
-          <input id="searchProducts" class="search-products" placeholder="🔎 Buscar">
-          <button id="showFavorites" class="extra-btn">❤️ Favoritos</button>
-        </div>
-      </div>
-      <div class="grid" id="productGrid"></div>
-    </section>
+<main>
+<section class="section" id="productos">
+<div class="section-title">
+<div><p class="eyebrow">Catálogo</p><h2>Nuestros productos</h2></div>
+<div class="toolbar">
+<input id="searchProducts" class="search" placeholder="🔎 Buscar">
+<select id="categoryFilter"><option value="">Todas las categorías</option></select>
+<select id="sortProducts"><option value="featured">Destacados</option><option value="bestsellers">Más vendidos</option><option value="newest">Novedades</option><option value="priceAsc">Precio menor</option><option value="priceDesc">Precio mayor</option></select>
+<button id="showFavorites" class="extra-btn">❤️ Favoritos</button>
+</div>
+</div>
+<div id="featuredWrap"></div>
+<div class="grid" id="productGrid"></div>
+</section>
 
-    <section class="info">
-      <div><span>🚚</span><strong>Entrega a domicilio</strong><p>Coordinamos contigo los detalles del pedido.</p></div>
-      <div><span>💬</span><strong>Pedido fácil</strong><p>Elige tus productos y envíanos el pedido.</p></div>
-      <div><span>✨</span><strong>Hecho por nosotros</strong><p>Un pequeño proyecto hecho entre amigos.</p></div>
-    </section>
-  </main>
+<section class="info">
+<div><span>🚚</span><strong>Entrega a domicilio</strong><p>Coordinamos contigo los detalles del pedido.</p></div>
+<div><span>💬</span><strong>Pedido fácil</strong><p>Elige tus productos y recibe confirmación.</p></div>
+<div><span>✨</span><strong>Hecho por nosotros</strong><p>Un pequeño proyecto hecho entre amigos.</p></div>
+</section>
 
-  <div class="overlay" id="overlay"></div>
-  <aside class="cart" id="cart">
-    <div class="cart-head">
-      <h2>Tu pedido</h2>
-      <button id="closeCart" class="icon-btn">✕</button>
-    </div>
-    <div id="cartItems" class="cart-items"></div>
-    <div class="cart-bottom">
-      <div class="total"><span>Total</span><strong id="cartTotal">0,00 €</strong></div>
-      <button class="primary full" id="checkoutBtn">Hacer pedido</button>
-      <p class="small">Al pulsar, se abrirá Telegram con el pedido preparado para enviarlo.</p>
-    </div>
-  </aside>
+<section class="section club-box">
+<div><p class="eyebrow">Club del Tercio</p><h2>Compra y acumula puntos ⭐</h2><p>1 € gastado = 1 punto. Consulta tus puntos con tu teléfono.</p><button class="primary" id="clubBtn2">Ver mis puntos</button></div>
+</section>
+</main>
 
-  <aside class="cart" id="favoritesPanel">
-  <div class="cart-head"><h2>❤️ Favoritos</h2><button id="closeFavorites" class="icon-btn">✕</button></div>
-  <div id="favoriteItems" class="cart-items"></div>
+<div class="overlay" id="overlay"></div>
+
+<aside class="cart" id="cart">
+<div class="cart-head"><h2>Tu pedido</h2><button type="button" id="closeCart" class="icon-btn">✕</button></div>
+<div id="cartItems" class="cart-items"></div>
+<div class="cart-bottom">
+<div class="coupon-row"><input id="coupon" placeholder="Código de descuento"><button type="button" id="applyCoupon" class="small-btn">Aplicar</button></div>
+<div id="couponMessage" class="small"></div>
+<div class="total"><span>Total</span><strong id="cartTotal">0,00 €</strong></div>
+<button type="button" class="primary full" id="checkoutBtn">Hacer pedido</button>
+</div>
 </aside>
+
+<aside class="cart" id="favoritesPanel">
+<div class="cart-head"><h2>❤️ Favoritos</h2><button type="button" id="closeFavorites" class="icon-btn">✕</button></div>
+<div id="favoriteItems" class="cart-items"></div>
+</aside>
+
 <dialog id="checkoutDialog">
-    <form method="dialog" id="checkoutForm">
-      <button class="dialog-close" value="cancel">✕</button>
-      <p class="eyebrow">Último paso</p>
-      <h2>Datos de entrega</h2>
-      <label>Nombre<input required id="name" placeholder="Tu nombre"></label>
-      <label>Teléfono<input required id="phone" type="tel" placeholder="600 000 000"></label>
-      <label>Dirección de entrega<textarea required id="address" rows="3" placeholder="Calle, número, piso..."></textarea></label>
-      <label>Notas (opcional)<textarea id="notes" rows="2" placeholder="Color, tamaño, indicaciones..."></textarea></label>
-      <button class="primary full" value="submit">Preparar pedido en Telegram</button>
-    </form>
-  </dialog>
+<form id="checkoutForm">
+<button type="button" class="dialog-close" onclick="this.closest('dialog').close()">✕</button>
+<p class="eyebrow">Último paso</p><h2>Datos de entrega</h2>
+<label>Nombre<input required id="name"></label>
+<label>Teléfono<input required id="phone"></label>
+<label>Dirección<textarea required id="address" rows="3"></textarea></label>
+<label>Notas (opcional)<textarea id="notes" rows="2"></textarea></label>
+<button class="primary full" type="submit">Confirmar pedido</button>
+</form>
+</dialog>
 
-  <footer>
-    <div class="logo">Mercadillo<span>delTercio</span></div>
-    <p>© 2026 · Proyecto entre amigos</p>
-  </footer>
+<dialog id="clubDialog">
+<form id="clubForm">
+<button type="button" class="dialog-close" onclick="this.closest('dialog').close()">✕</button>
+<p class="eyebrow">Club del Tercio</p><h2>⭐ Tus puntos</h2>
+<label>Teléfono<input required id="clubPhone"></label>
+<button class="primary full" type="submit">Consultar puntos</button>
+<div id="clubResult" class="club-result"></div>
+</form>
+</dialog>
 
-  <script src="app.js"></script>
+<dialog id="reviewDialog">
+<form id="reviewForm">
+<button type="button" class="dialog-close" onclick="this.closest('dialog').close()">✕</button>
+<p class="eyebrow">Valorar producto</p><h2>⭐ Tu opinión</h2>
+<input type="hidden" id="reviewProductId">
+<label>Nombre<input id="reviewName" maxlength="40"></label>
+<label>Valoración<select id="reviewRating"><option value="5">5 ⭐⭐⭐⭐⭐</option><option value="4">4 ⭐⭐⭐⭐</option><option value="3">3 ⭐⭐⭐</option><option value="2">2 ⭐⭐</option><option value="1">1 ⭐</option></select></label>
+<label>Comentario<textarea id="reviewText" rows="3"></textarea></label>
+<button class="primary full" type="submit">Enviar valoración</button>
+</form>
+</dialog>
+
+<footer><div class="logo">Mercadillo<span>delTercio</span></div><p>© 2026 · Proyecto entre amigos</p></footer>
+<script src="app.js"></script>
 </body>
 </html>
