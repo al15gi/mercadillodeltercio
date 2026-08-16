@@ -97,6 +97,22 @@ document.getElementById("favoritesBtn").onclick=openFavorites;
 document.getElementById("closeFavorites").onclick=closePanels;
 overlay.onclick=closePanels;
 
+// Close buttons (X) inside the checkout / Club dialogs.
+document.querySelectorAll(".dialog-close").forEach(btn => {
+  btn.addEventListener("click", (event) => {
+    event.preventDefault();
+    const dlg = btn.closest("dialog");
+    if (dlg) dlg.close();
+  });
+});
+
+// Clicking outside a dialog also closes it.
+document.querySelectorAll("dialog").forEach(dlg => {
+  dlg.addEventListener("click", (event) => {
+    if (event.target === dlg) dlg.close();
+  });
+});
+
 document.getElementById("showFavorites").onclick=()=>{
   const btn=document.getElementById("showFavorites");
   const active=btn.dataset.only==="true";
