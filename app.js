@@ -96,23 +96,6 @@ document.getElementById("closeCart").onclick=closePanels;
 document.getElementById("favoritesBtn").onclick=openFavorites;
 document.getElementById("closeFavorites").onclick=closePanels;
 overlay.onclick=closePanels;
-document.querySelectorAll(".dialog-close").forEach(btn=>{
-  btn.addEventListener("click",e=>{
-    e.preventDefault();
-    const dlg=btn.closest("dialog");
-    if(dlg) dlg.close();
-  });
-});
-document.querySelectorAll("dialog").forEach(dlg=>{
-  dlg.addEventListener("click",e=>{
-    if(e.target===dlg) dlg.close();
-  });
-});
-
-document.getElementById("closeCart").onclick=closePanels;
-document.getElementById("favoritesBtn").onclick=openFavorites;
-document.getElementById("closeFavorites").onclick=closePanels;
-overlay.onclick=closePanels;
 
 document.getElementById("showFavorites").onclick=()=>{
   const btn=document.getElementById("showFavorites");

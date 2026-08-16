@@ -47,7 +47,7 @@
   <aside class="cart" id="cart">
     <div class="cart-head">
       <h2>Tu pedido</h2>
-      <button id="closeCart" class="icon-btn">✕</button>
+      <button type="button" id="closeCart" class="icon-btn" onclick="document.getElementById('cart').classList.remove('open');document.getElementById('overlay').classList.remove('show')">✕</button>
     </div>
     <div id="cartItems" class="cart-items"></div>
     <div class="cart-bottom">
@@ -58,12 +58,12 @@
   </aside>
 
   <aside class="cart" id="favoritesPanel">
-  <div class="cart-head"><h2>❤️ Favoritos</h2><button id="closeFavorites" class="icon-btn">✕</button></div>
+  <div class="cart-head"><h2>❤️ Favoritos</h2><button type="button" id="closeFavorites" class="icon-btn" onclick="document.getElementById('favoritesPanel').classList.remove('open');document.getElementById('overlay').classList.remove('show')">✕</button></div>
   <div id="favoriteItems" class="cart-items"></div>
 </aside>
 <dialog id="checkoutDialog">
     <form method="dialog" id="checkoutForm">
-      <button class="dialog-close" value="cancel">✕</button>
+      <button type="button" class="dialog-close" onclick="this.closest('dialog').close()">✕</button>
       <p class="eyebrow">Último paso</p>
       <h2>Datos de entrega</h2>
       <label>Nombre<input required id="name" placeholder="Tu nombre"></label>
